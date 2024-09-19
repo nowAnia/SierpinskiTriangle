@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.sierpinski.SierpinskiTriangleApplicationController">
+    <top>
+        <VBox alignment="center">
+            <Group fx:id="group">
+            </Group>
+        </VBox>
+    </top>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <bottom>
+        <HBox spacing="550">
+            <Button text="GoDeeper!" onAction="#onGoDeeperClick"/>
+            <Button text="CreateFractal" onAction="#onGoCreateFractal"/>
+        </HBox>
+    </bottom>
+</BorderPane>
