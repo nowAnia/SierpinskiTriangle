@@ -15,6 +15,12 @@ public class Triangle {
     private final Color black = javafx.scene.paint.Color.BLACK;
     private Color currentColor;
 
+    public Triangle() {
+        x = new Point2D(750.0, 50.0);
+        y = new Point2D(50.0, 50.0);
+        z = new Point2D(400.0, 550.0);
+    }
+
     public Point2D getX() {
         return x;
     }
@@ -27,11 +33,6 @@ public class Triangle {
         return z;
     }
 
-    public Triangle() {
-        x = new Point2D(750.0, 50.0);
-        y = new Point2D(50.0, 50.0);
-        z = new Point2D(400.0, 550.0);
-    }
 
     public Polygon drawTriangle() {
         Polygon polygon = new Polygon();
@@ -69,18 +70,13 @@ public class Triangle {
     }
 
     public List<TrianglePoints> createFractal(TrianglePoints triangle) {
-        List<Point2D> listOfPoints = new LinkedList<>();
-        listOfPoints.add(triangle.x());
-        listOfPoints.add(triangle.y());
-        listOfPoints.add(triangle.z());
-
-        List<Point2D> listOfMidPoints = createMidPoints(listOfPoints);
+        TrianglePoints insideTriangle = createMidPoints(triangle);
 
         List<TrianglePoints> leftTriangles = new LinkedList<>();
 
-        TrianglePoints triangle1 = new TrianglePoints(listOfPoints.get(0), listOfMidPoints.get(0), listOfMidPoints.get(2));
-        TrianglePoints triangle2 = new TrianglePoints(listOfPoints.get(2), listOfMidPoints.get(1), listOfMidPoints.get(2));
-        TrianglePoints triangle3 = new TrianglePoints(listOfPoints.get(1), listOfMidPoints.get(0), listOfMidPoints.get(1));
+        TrianglePoints triangle1 = new TrianglePoints(triangle.A(), insideTriangle.A(), insideTriangle.C());
+        TrianglePoints triangle2 = new TrianglePoints(triangle.C(), insideTriangle.B(), insideTriangle.C());
+        TrianglePoints triangle3 = new TrianglePoints(triangle.B(), insideTriangle.A(), insideTriangle.B());
 
         leftTriangles.add(triangle1);
         leftTriangles.add(triangle2);
@@ -90,19 +86,12 @@ public class Triangle {
     }
 
     public Polygon createPolygon(TrianglePoints excludeOnePolygon) {
-        List<Point2D> listOfPoints = new LinkedList<>();
-
-        listOfPoints.add(excludeOnePolygon.x());
-        listOfPoints.add(excludeOnePolygon.y());
-        listOfPoints.add(excludeOnePolygon.z());
-
         Polygon polygon = new Polygon();
 
-        List<Point2D> listOfMidPoints = createMidPoints(listOfPoints);
-
-        for (var point : listOfMidPoints) {
-            polygon.getPoints().addAll(point.getX(), point.getY());
-        }
+        TrianglePoints insideTriangle = createMidPoints(excludeOnePolygon);
+        polygon.getPoints().addAll(insideTriangle.A().getX(), insideTriangle.A().getY());
+        polygon.getPoints().addAll(insideTriangle.B().getX(), insideTriangle.B().getY());
+        polygon.getPoints().addAll(insideTriangle.C().getX(), insideTriangle.C().getY());
 
         currentColor = red;
         polygon.setFill(currentColor);
@@ -110,21 +99,11 @@ public class Triangle {
         return polygon;
     }
 
-    private List<Point2D> createMidPoints(List<Point2D> listPoints) {
-        List<Point2D> midPoints = new LinkedList<Point2D>();
+    private TrianglePoints createMidPoints(TrianglePoints outsideTriangle) {
+        Point2D newX = outsideTriangle.A().midpoint(outsideTriangle.B());
+        Point2D newY = outsideTriangle.B().midpoint(outsideTriangle.C());
+        Point2D newZ = outsideTriangle.C().midpoint(outsideTriangle.A());
 
-        Point2D x = listPoints.get(0);
-        Point2D y = listPoints.get(1);
-        Point2D z = listPoints.get(2);
-
-        Point2D newX = x.midpoint(y);
-        midPoints.add(newX);
-        Point2D newY = y.midpoint(z);
-        midPoints.add(newY);
-
-        Point2D newZ = z.midpoint(x);
-        midPoints.add(newZ);
-
-        return midPoints;
+        return new TrianglePoints(newX, newY, newZ);
     }
 }
