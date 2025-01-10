@@ -69,14 +69,14 @@ public class Triangle {
         return polygon;
     }
 
-    public List<TrianglePoints> createFractal(TrianglePoints triangle) {
-        TrianglePoints insideTriangle = createMidPoints(triangle);
+    public List<TrianglePoints> createFractal(TrianglePoints blackTriangle) {
+        TrianglePoints redTriangle = createMidPoints(blackTriangle);
 
         List<TrianglePoints> leftTriangles = new LinkedList<>();
 
-        TrianglePoints triangle1 = new TrianglePoints(triangle.A(), insideTriangle.A(), insideTriangle.C());
-        TrianglePoints triangle2 = new TrianglePoints(triangle.C(), insideTriangle.B(), insideTriangle.C());
-        TrianglePoints triangle3 = new TrianglePoints(triangle.B(), insideTriangle.A(), insideTriangle.B());
+        TrianglePoints triangle1 = new TrianglePoints(blackTriangle.A(), redTriangle.A(), redTriangle.C());
+        TrianglePoints triangle2 = new TrianglePoints(blackTriangle.C(), redTriangle.B(), redTriangle.C());
+        TrianglePoints triangle3 = new TrianglePoints(blackTriangle.B(), redTriangle.A(), redTriangle.B());
 
         leftTriangles.add(triangle1);
         leftTriangles.add(triangle2);
@@ -85,10 +85,10 @@ public class Triangle {
         return leftTriangles;
     }
 
-    public Polygon createPolygon(TrianglePoints excludeOnePolygon) {
+    public Polygon createRedTrianglePolygon(TrianglePoints blackTriangle) {
         Polygon polygon = new Polygon();
 
-        TrianglePoints insideTriangle = createMidPoints(excludeOnePolygon);
+        TrianglePoints insideTriangle = createMidPoints(blackTriangle);
         polygon.getPoints().addAll(insideTriangle.A().getX(), insideTriangle.A().getY());
         polygon.getPoints().addAll(insideTriangle.B().getX(), insideTriangle.B().getY());
         polygon.getPoints().addAll(insideTriangle.C().getX(), insideTriangle.C().getY());

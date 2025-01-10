@@ -34,7 +34,7 @@ public class SierpinskiTriangleApplicationController {
     protected void onGoCreateFractal() {
         List<TrianglePoints> newActiveTriangles = new ArrayList<>();
         for (var trianglePoints : activeTriangles) {
-            newActiveTriangles.addAll(recursiveWay(trianglePoints));
+            newActiveTriangles.addAll(sierpinskiFractalStep(trianglePoints));
         }
 
         activeTriangles = newActiveTriangles;
@@ -44,10 +44,10 @@ public class SierpinskiTriangleApplicationController {
         group.getChildren().add(triangle.drawTriangle());
     }
 
-    private List<TrianglePoints> recursiveWay(TrianglePoints points) {
-        Polygon excludedTriangle = triangle.createPolygon(points);
+    private List<TrianglePoints> sierpinskiFractalStep(TrianglePoints blackTriangle) {
+        Polygon excludedTriangle = triangle.createRedTrianglePolygon(blackTriangle);
         group.getChildren().add(excludedTriangle);
 
-        return triangle.createFractal(points);
+        return triangle.createFractal(blackTriangle);
     }
 }
